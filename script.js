@@ -28,7 +28,6 @@ window.addEventListener("load", (event) => {
         'X': '_.._',
         'Y': '_.__',
         'Z': '__..',
-        /*
         '1': '.____',
         '2': '..___',
         '3': '...__',
@@ -38,40 +37,77 @@ window.addEventListener("load", (event) => {
         '7': '__...',
         '8': '___..',
         '9': '____.',
-        '0': '_____'
-        */
+        '0': '_____',
+        '.': '._._._',
+        ',': '__..__',
+        '?': '..__..',
+        "'": '.____.',
+        '!': '_._.__',
+        '(': '_.__.',
+        ')': '_.__.)',
+        '&': '._...',
+        ':': '___...',
+        ';': '_._._;',
+        '=': '_..._',
+        '+': '._._.',
+        '-': '_...._',
+        '_': '..__._',
+        '"': '._.._.',
+        '@': '.__._.'
 
     };    
 
-    let string= [];
+    let result= [];
 
     const morseButton = document.getElementById("morseButton");
+
     morseButton.addEventListener('click',() => {
 
-        const morseCode = document.getElementById("morseInput").value;
+        let morseCode = document.getElementById("morseInput").value;
+        let output = document.getElementById("output");
 
+        morseCode = morseCode.replaceAll('-','_');
+        const morseSentence = morseCode.split('/');
 
-        const words = morseCode.split('/');
-
-        words.forEach( word => {
-            const letters= word.split(' ');;
-            for(let i = 0 ; i < letters.length; i++){
+        morseSentence.forEach( morseWord => {
+            const symbols= morseWord.split(' ');
+            for(let i = 0 ; i < symbols.length; i++){
                 Object.entries(morse).forEach(([key, value]) => {
-                    if(value === letters[i]){
-                        string.push(key);
+                    if(value === symbols[i]){
+                        result.push(key);
                     } 
                 })
             }
-            string.push(' ');
+            result.push(' ');
         })
-        const output = document.getElementById("output");
-        output.textContent = string.join('');
+
+        englishInput.value = '';
+        output.textContent = '';
+        output.textContent = result.join('');
     })
 
     const englishButton = document.getElementById("englishButton");
+
     englishButton.addEventListener('click', () => {
-        const sentence = document.getElementById("englishInput").value;
 
+        result = [];
+        let englishPhrase = document.getElementById("englishInput").value.toUpperCase();
+        let words = englishPhrase.trim().split(' ');
 
+        words.forEach(word =>{
+            word.split('').forEach(letter => {
+                Object.entries(morse).forEach(([key, value]) => {
+                    if(key === letter){
+                        result.push(value);
+                    } 
+                });
+                result.push(' ');
+            });
+            result.push('/');
+        });
+
+        morseInput.value = '';
+        output.textContent = '';
+        output.textContent = result.join('');
     })
 })
